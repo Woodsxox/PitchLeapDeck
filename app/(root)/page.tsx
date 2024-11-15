@@ -1,11 +1,13 @@
-import { STARTUP_QUERY } from "@/lib/queries";
+import { STARTUP_QUERY } from "./../../sanity/lib/queries";
 import SearchForm from "../../components/SearchForm";
 import StartupCard, { StartupTypeCard }  from "@/components/StartupCard";
 import { SanityLive, sanityFetch } from "@/sanity/lib/live";
+import { auth } from "@/auth";
 
   
 export default async function Home({ searchParams }: { searchParams: Promise<{ query?: string }> }) {
   
+
   // Await the searchParams promise and destructure it safely
   // const params = await searchParams;
 
@@ -13,12 +15,16 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ q
   // const query = params?.query || "";     OR
 
 
+
+
   const query = (await searchParams).query
   
-  const params ={ search: query || null}
+  const params = { search: query || null }
+  
+  const session = await auth()
+console.log(session?.id)  
+
   const {data: posts } = await sanityFetch({query: STARTUP_QUERY, params})
-
-
   return (
     <>
       <section className="green_container"> 
